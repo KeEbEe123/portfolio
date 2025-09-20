@@ -137,7 +137,7 @@
 
 /* GitHubCalendar theming (scoped) */
 .calendar-theme svg rect[data-level="0"] {
-  fill: #01344f !important; /* lightest red tint (empty) */
+  fill: #012133 !important; /* lightest red tint (empty) */
 }
 .calendar-theme svg rect[data-level="1"] {
   fill: #f8c6c8 !important;
