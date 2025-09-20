@@ -1,12 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useLayoutEffect, useRef } from "react";
+import { useState, useLayoutEffect, useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import gsap from "gsap";
 import GitHubCalendar from "react-github-calendar";
 import me from "../public/images/me.png";
 import GlitchText from "@/components/GlitchText";
+import SpotifyLastPlayed from "@/components/SpotifyLastPlayed";
+import Lottie from "lottie-react";
 
 import SplitText from "gsap/SplitText"; // ✅ requires GSAP bonus plugin
 
@@ -17,7 +19,63 @@ export default function Home() {
   const calendarScrollRef = useRef<HTMLDivElement | null>(null);
   const [totalContributions, setTotalContributions] = useState<number>(0);
   const navbarRef = useRef<HTMLDivElement | null>(null);
+  const [spectrumData, setSpectrumData] = useState<any | null>(null);
   const photoRef = useRef<HTMLDivElement | null>(null);
+
+  // Recolor any RGBA arrays in the Lottie JSON to the target color (preserve alpha)
+  function recolorLottieJson(json: any, targetHex: string) {
+    const hex = targetHex.replace("#", "");
+    const r = parseInt(hex.slice(0, 2), 16) / 255;
+    const g = parseInt(hex.slice(2, 4), 16) / 255;
+    const b = parseInt(hex.slice(4, 6), 16) / 255;
+
+    const isColorArray = (arr: any): arr is number[] =>
+      Array.isArray(arr) &&
+      arr.length === 4 &&
+      arr.every((n) => typeof n === "number") &&
+      arr[0] >= 0 &&
+      arr[0] <= 1 &&
+      arr[1] >= 0 &&
+      arr[1] <= 1 &&
+      arr[2] >= 0 &&
+      arr[2] <= 1 &&
+      arr[3] >= 0 &&
+      arr[3] <= 1;
+
+    const walk = (node: any, parentKey?: string) => {
+      if (!node) return;
+      if (Array.isArray(node)) {
+        // Some Lottie colors are directly arrays in certain contexts
+        if (isColorArray(node)) {
+          const alpha = node[3];
+          node[0] = r;
+          node[1] = g;
+          node[2] = b;
+          node[3] = alpha;
+          return;
+        }
+        for (let i = 0; i < node.length; i++) walk(node[i]);
+      } else if (typeof node === "object") {
+        for (const key of Object.keys(node)) {
+          const val = (node as any)[key];
+          // Typical pattern: { c: { k: [r,g,b,a] } }
+          if (key === "k" && isColorArray(val)) {
+            const alpha = val[3];
+            (node as any)[key] = [r, g, b, alpha];
+            continue;
+          }
+          walk(val, key);
+        }
+      }
+    };
+
+    try {
+      walk(json);
+    } catch (e) {
+      console.warn("Lottie recolor encountered an issue (non-fatal):", e);
+    }
+    return json;
+  }
 
   useLayoutEffect(() => {
     gsap.registerPlugin(SplitText);
@@ -35,7 +93,10 @@ export default function Home() {
       const boxes = gsap.utils.toArray<HTMLElement>("[data-from]");
 
       gsap.set(boxes, { opacity: 0 });
-      gsap.set(navbarRef.current, { opacity: 0, y: -100 });
+      gsap.set(navbarRef.current, {
+        opacity: 1,
+        y: 300,
+      });
       // gsap.set(photoRef.current, { opacity: 1, x: "400%" });
 
       // Split text into words but don’t animate yet
@@ -59,7 +120,6 @@ export default function Home() {
       tl.to(navbarRef.current, {
         opacity: 1,
         y: 0,
-        duration: 0.5,
       });
 
       // Step 2: Boxes with stagger
@@ -101,6 +161,27 @@ export default function Home() {
     return () => {
       ctx.revert();
       if (splitRef.current?.revert) splitRef.current.revert();
+    };
+  }, []);
+
+  // Load spectrum Lottie JSON from public/
+  useEffect(() => {
+    let mounted = true;
+    fetch("/spectrum.json")
+      .then((r) =>
+        r.ok
+          ? r.json()
+          : Promise.reject(new Error("Failed to load spectrum.json"))
+      )
+      .then((json) => {
+        if (mounted) {
+          const recolored = recolorLottieJson(json, "#FAE3AC");
+          setSpectrumData(recolored);
+        }
+      })
+      .catch((e) => console.error(e));
+    return () => {
+      mounted = false;
     };
   }, []);
   // Scroll the GitHub calendar to the rightmost position so latest activity is visible by default
@@ -247,6 +328,23 @@ export default function Home() {
             }}
             className="absolute top-0 left-0 w-full h-full object-contain"
           />
+
+          {/* Spectrum Lottie overlay (position from here) */}
+          <div className="absolute left-[25%] top-[50%] z-10 pointer-events-none select-none w-60 h-44">
+            {spectrumData ? (
+              <Lottie
+                animationData={spectrumData}
+                loop
+                autoplay
+                style={{ width: "100%", height: "100%" }}
+              />
+            ) : null}
+          </div>
+
+          {/* Spotify last played overlay (position from here) */}
+          <div className="absolute left-[20%] top-[8.333%] bottom-6">
+            <SpotifyLastPlayed />
+          </div>
 
           {/* Overlay example (remove if not needed) */}
           <div className="absolute font-bangers text-[55px] left-0 top-3/4 -translate-y-1/2 -rotate-90 origin-left text-[#D12128] pt-20">
