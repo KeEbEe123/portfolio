@@ -24,6 +24,8 @@ export default function Home() {
   const [spectrumData, setSpectrumData] = useState<any | null>(null);
   const photoRef = useRef<HTMLDivElement | null>(null);
   const spidermanRef = useRef<HTMLDivElement | null>(null);
+  // add this near your other refs
+  const rootRef = useRef<HTMLDivElement | null>(null);
 
   // Recolor any RGBA arrays in the Lottie JSON to the target color (preserve alpha)
   function recolorLottieJson(json: any, targetHex: string) {
@@ -95,14 +97,12 @@ export default function Home() {
 
       const boxes = gsap.utils.toArray<HTMLElement>("[data-from]");
 
-      gsap.set(boxes, { opacity: 0 });
+      gsap.set(boxes, { autoAlpha: 0 });
       gsap.set(navbarRef.current, {
         opacity: 1,
         y: "-200%",
       });
-      gsap.set(navButtonsRef.current, {
-        opacity: 0,
-      });
+
       gsap.set(spidermanRef.current, {
         opacity: 1,
         scale: 1,
@@ -134,6 +134,7 @@ export default function Home() {
         delay: 2,
         ease: "expo.inOut",
       });
+      tl.set(rootRef.current, { visibility: "visible" });
       tl.to(navbarRef.current, {
         opacity: 1,
         y: 0,
@@ -141,14 +142,11 @@ export default function Home() {
         clearProps: "transform",
       });
 
-      tl.to(navButtonsRef.current, {
-        opacity: 1,
-      });
       // Step 2: Boxes with stagger
       tl.fromTo(
         boxes,
         {
-          opacity: 0,
+          autoAlpha: 1,
           x: (i, el) =>
             el.dataset.from === "left"
               ? "-100%"
@@ -157,7 +155,7 @@ export default function Home() {
               : "0",
           y: (i, el) =>
             el.dataset.from === "up"
-              ? "-100%"
+              ? "-200%"
               : el.dataset.from === "down"
               ? "100%"
               : "0",
@@ -165,7 +163,7 @@ export default function Home() {
         {
           x: 0,
           y: 0,
-          opacity: 1,
+          autoAlpha: 1,
           clearProps: "transform",
           stagger: 0.2,
         }
@@ -240,8 +238,9 @@ export default function Home() {
       </div>
       {/* Make the grid fill the padded area exactly */}
       <div
+        ref={rootRef}
         // data-from="up"
-        className="grid h-full w-full gap-4 grid-cols-6 grid-rows-6 overflow-hidden"
+        className="grid h-full w-full gap-4 grid-cols-6 grid-rows-6 overflow-hidden invisible"
       >
         {/* Header (no hover effects) */}
         <div
