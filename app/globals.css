@@ -124,6 +124,65 @@
   }
 }
 
+/* Custom site-wide cursor */
+:root {
+  /* adjust hotspot (x y) if the active point isn't aligned */
+  --cursor-asset: url("/cursor.svg");
+  --cursor-hotspot-x: 8; /* px from left */
+  --cursor-hotspot-y: 8; /* px from top */
+}
+
+/* Default: we will render our own cursor element; hide the native cursor */
+html,
+body {
+  cursor: none;
+}
+
+/* Keep native I-beam for text fields */
+input[type="text"],
+input[type="search"],
+input[type="email"],
+input[type="password"],
+textarea {
+  cursor: text;
+}
+
+/* Also hide cursor over common interactive elements so our custom one is used */
+a,
+button,
+[role="button"],
+.cursor-pointer {
+  cursor: none;
+}
+
+/* Custom cursor element styles */
+.custom-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 24px; /* reduce size */
+  height: 24px;
+  z-index: 9999;
+  pointer-events: none; /* never block clicks */
+  will-change: transform;
+}
+.custom-cursor img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  transform-origin: 50% 50%;
+  animation: cursor-spin 1.2s linear infinite; /* continuous spin */
+}
+
+@keyframes cursor-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* Hide scrollbars cross-browser */
 .no-scrollbar {
   /* Firefox */

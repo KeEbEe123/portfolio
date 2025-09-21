@@ -2,6 +2,7 @@ import type React from "react";
 import type { Metadata } from "next";
 import { Marcellus_SC, Figtree, Bangers } from "next/font/google";
 import { Suspense } from "react";
+import CustomCursor from "@/components/CustomCursor";
 import "./globals.css";
 
 const marcellusSC = Marcellus_SC({
@@ -43,6 +44,7 @@ export default function RootLayout({
       <body
         className={`${marcellusSC.variable} ${figtree.variable} ${bangers.variable} antialiased`}
       >
+        <CustomCursor />
         <Suspense fallback={null}>{children}</Suspense>
       </body>
     </html>
