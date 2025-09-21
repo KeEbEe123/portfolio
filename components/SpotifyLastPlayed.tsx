@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { LoaderFour } from "./ui/loader";
 
 type Recent = {
   trackName: string;
@@ -150,7 +149,7 @@ export default function SpotifyLastPlayed() {
           aria-live="polite"
         >
           {loading ? (
-            <LoaderFour />
+            <span>—</span>
           ) : !data?.trackName ? (
             <span>—</span>
           ) : isScrolling ? (
