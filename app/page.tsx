@@ -26,7 +26,7 @@ export default function Home() {
   const spidermanRef = useRef<HTMLDivElement | null>(null);
   // add this near your other refs
   const rootRef = useRef<HTMLDivElement | null>(null);
-
+  const nameCardRef = useRef<HTMLDivElement | null>(null);
   // Recolor any RGBA arrays in the Lottie JSON to the target color (preserve alpha)
   function recolorLottieJson(json: any, targetHex: string) {
     const hex = targetHex.replace("#", "");
@@ -81,6 +81,47 @@ export default function Home() {
     }
     return json;
   }
+
+  // Fly the name card image from off-screen to the top-right of the photo box
+  const flyInNameCard = () => {
+    const card = nameCardRef.current;
+    const photo = photoRef.current;
+    if (!card || !photo) return;
+    const rect = photo.getBoundingClientRect();
+    const vw = window.innerWidth;
+    const targetX = rect.right + 12; // a little to the right of the photo box
+    const targetY = rect.top - 12; // a little above the photo box
+
+    // Position card via transforms relative to top-left of viewport
+    gsap.set(card, {
+      position: "fixed",
+      top: 0,
+      left: "-35%",
+      zIndex: 60,
+      pointerEvents: "none",
+      opacity: 1,
+    });
+
+    gsap.fromTo(
+      card,
+      { x: vw + 200, y: -200, rotation: 15, scale: 1 },
+      { x: targetX, y: targetY, rotation: 0, duration: 0.6, ease: "power3.out" }
+    );
+  };
+
+  const flyOutNameCard = () => {
+    const card = nameCardRef.current;
+    if (!card) return;
+    const vw = window.innerWidth;
+    gsap.to(card, {
+      x: vw + 200,
+      y: -200,
+      rotation: 15,
+      duration: 0.5,
+      ease: "power3.in",
+      onComplete: () => gsap.set(card, { opacity: 0 }),
+    });
+  };
 
   useLayoutEffect(() => {
     gsap.registerPlugin(SplitText);
@@ -221,7 +262,7 @@ export default function Home() {
     // Use 100dvh so the whole thing matches the visible viewport height precisely.
     // Keep horizontal overflow hidden so slide-ins don't create a horizontal scrollbar.
     // If you only want bottom padding, use pb-4 instead of p-4.
-    <div className="h-[100dvh] bg-[#FAE3AC] p-4 overflow-x-hidden overscroll-none">
+    <div className="h-[100dvh] bg-[#141414] p-4 overflow-x-hidden overscroll-none">
       <div
         ref={spidermanRef}
         className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
@@ -236,6 +277,15 @@ export default function Home() {
           height={200}
         />
       </div>
+      {/* Floating name card element (positioned with GSAP) */}
+      <div
+        ref={nameCardRef}
+        className="fixed top-0 left-0 z-[60] pointer-events-none opacity-0"
+        style={{ willChange: "transform, opacity" }}
+      >
+        <Image src="/namecard.png" alt="Name card" width={250} height={250} />
+      </div>
+
       {/* Make the grid fill the padded area exactly */}
       <div
         ref={rootRef}
@@ -316,10 +366,16 @@ export default function Home() {
 
         {/* Photo */}
         <div
-          // ref={photoRef}
+          ref={photoRef}
           data-from="right"
-          onMouseEnter={() => setHovered(2)}
-          onMouseLeave={() => setHovered(null)}
+          onMouseEnter={() => {
+            setHovered(2);
+            flyInNameCard();
+          }}
+          onMouseLeave={() => {
+            setHovered(null);
+            flyOutNameCard();
+          }}
           className={cn(
             "col-span-2 row-span-4 bg-[#01344F] rounded-lg shadow-md flex items-center justify-center overflow-hidden",
             "transition-all duration-300 ease-out will-change-transform",
@@ -335,7 +391,6 @@ export default function Home() {
           />
         </div>
 
-        {/* Bottom left */}
         {/* Bottom left */}
         <div
           data-from="left"
@@ -365,7 +420,7 @@ export default function Home() {
           />
 
           {/* Spectrum Lottie overlay (position from here) */}
-          <div className="absolute left-[25%] top-[50%] z-10 pointer-events-none select-none w-60 h-44">
+          <div className="absolute left-[25%] top-[50%] 2xl:left-[30%] 2xl:top-[60%] z-10 pointer-events-none select-none w-60 h-44">
             {spectrumData ? (
               <Lottie
                 animationData={spectrumData}

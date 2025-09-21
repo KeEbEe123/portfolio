@@ -126,9 +126,9 @@ export default function SpotifyLastPlayed() {
   }, [data?.trackName, loading]);
 
   return (
-    <div className="select-none flex items-center gap-4">
+    <div className="select-none flex items-center gap-4 2xl:mt-2">
       {/* Album art */}
-      <div className="relative h-10 w-10 rounded-lg bg-red-600 overflow-hidden">
+      <div className="relative h-10 w-10 2xl:h-12 2xl:w-12 rounded-lg bg-red-600 overflow-hidden">
         {data?.imageUrl ? (
           <Image
             src={data.imageUrl}
@@ -145,7 +145,7 @@ export default function SpotifyLastPlayed() {
       <div className="flex min-w-0 flex-col">
         <div
           ref={containerRef}
-          className="relative w-[140px] text-xl font-figtree -mb-2 font-semibold leading-7 text-[#FAE3AC] drop-shadow-[0_1px_1px_rgba(0,0,0,0.7)] overflow-hidden"
+          className="relative w-[140px] 2xl:w-[200px] text-xl 2xl:text-2xl font-figtree -mb-2 font-semibold leading-7 text-[#FAE3AC] drop-shadow-[0_1px_1px_rgba(0,0,0,0.7)] overflow-hidden"
           aria-live="polite"
         >
           {loading ? (
@@ -174,7 +174,7 @@ export default function SpotifyLastPlayed() {
           )}
         </div>
 
-        <div className="text-xs font-figtree leading-7 truncate text-[#FAE3AC] drop-shadow-[0_1px_1px_rgba(0,0,0,0.7)]">
+        <div className="text-xs 2xl:text-sm font-figtree leading-7 truncate text-[#FAE3AC] drop-shadow-[0_1px_1px_rgba(0,0,0,0.7)]">
           {loading ? "" : data?.artistName || ""}
         </div>
       </div>
