@@ -1,0 +1,151 @@
+.glitch-svg {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  user-select: none;
+}
+
+.glitch-svg-main {
+  position: relative;
+  z-index: 3;
+  display: block;
+}
+
+.glitch-svg-before,
+.glitch-svg-after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  opacity: 0.8;
+}
+
+.glitch-svg:not(.enable-on-hover) .glitch-svg-after {
+  left: 10px;
+  filter: var(--after-filter, drop-shadow(-10px 0 purple));
+  animation: animate-glitch-svg var(--after-duration, 3s) infinite linear
+    alternate-reverse;
+  clip-path: inset(0 0 0 0);
+}
+
+.glitch-svg:not(.enable-on-hover) .glitch-svg-before {
+  left: -10px;
+  filter: var(--before-filter, drop-shadow(10px 0 cyan));
+  animation: animate-glitch-svg var(--before-duration, 2s) infinite linear
+    alternate-reverse;
+  clip-path: inset(0 0 0 0);
+}
+
+.glitch-svg.enable-on-hover .glitch-svg-after,
+.glitch-svg.enable-on-hover .glitch-svg-before {
+  opacity: 0;
+  animation: none;
+}
+
+.glitch-svg.enable-on-hover:hover .glitch-svg-after {
+  opacity: 0.8;
+  left: 10px;
+  filter: var(--after-filter, drop-shadow(-10px 0 purple));
+  animation: animate-glitch-svg var(--after-duration, 3s) infinite linear
+    alternate-reverse;
+}
+
+.glitch-svg.enable-on-hover:hover .glitch-svg-before {
+  opacity: 0.8;
+  left: -10px;
+  filter: var(--before-filter, drop-shadow(10px 0 cyan));
+  animation: animate-glitch-svg var(--before-duration, 2s) infinite linear
+    alternate-reverse;
+}
+
+/* Active glitch mode (JS-controlled). When this class is present,
+   we run the animations regardless of hover. */
+.glitch-svg.active-glitch .glitch-svg-after {
+  opacity: 0.8;
+  left: 10px;
+  filter: var(--after-filter, drop-shadow(-10px 0 purple));
+  animation: animate-glitch-svg var(--after-duration, 3s) infinite linear
+    alternate-reverse;
+  clip-path: inset(0 0 0 0);
+}
+
+.glitch-svg.active-glitch .glitch-svg-before {
+  opacity: 0.8;
+  left: -10px;
+  filter: var(--before-filter, drop-shadow(10px 0 cyan));
+  animation: animate-glitch-svg var(--before-duration, 2s) infinite linear
+    alternate-reverse;
+  clip-path: inset(0 0 0 0);
+}
+
+/* If active-glitch is present, ignore hover-triggered animations to keep the
+   timing loop authoritative. */
+/* Note: no hover override here; when active-glitch is set, the rules above
+   (declared later in the file) will win due to cascade order, keeping
+   the animation running regardless of hover. */
+
+@keyframes animate-glitch-svg {
+  0% {
+    clip-path: inset(20% 0 50% 0);
+  }
+  5% {
+    clip-path: inset(10% 0 60% 0);
+  }
+  10% {
+    clip-path: inset(15% 0 55% 0);
+  }
+  15% {
+    clip-path: inset(25% 0 35% 0);
+  }
+  20% {
+    clip-path: inset(30% 0 40% 0);
+  }
+  25% {
+    clip-path: inset(40% 0 20% 0);
+  }
+  30% {
+    clip-path: inset(10% 0 60% 0);
+  }
+  35% {
+    clip-path: inset(15% 0 55% 0);
+  }
+  40% {
+    clip-path: inset(25% 0 35% 0);
+  }
+  45% {
+    clip-path: inset(30% 0 40% 0);
+  }
+  50% {
+    clip-path: inset(20% 0 50% 0);
+  }
+  55% {
+    clip-path: inset(10% 0 60% 0);
+  }
+  60% {
+    clip-path: inset(15% 0 55% 0);
+  }
+  65% {
+    clip-path: inset(25% 0 35% 0);
+  }
+  70% {
+    clip-path: inset(30% 0 40% 0);
+  }
+  75% {
+    clip-path: inset(40% 0 20% 0);
+  }
+  80% {
+    clip-path: inset(20% 0 50% 0);
+  }
+  85% {
+    clip-path: inset(10% 0 60% 0);
+  }
+  90% {
+    clip-path: inset(15% 0 55% 0);
+  }
+  95% {
+    clip-path: inset(25% 0 35% 0);
+  }
+  100% {
+    clip-path: inset(30% 0 40% 0);
+  }
+}

@@ -9,7 +9,8 @@ import me from "../public/images/me.png";
 import GlitchText from "@/components/GlitchText";
 import SpotifyLastPlayed from "@/components/SpotifyLastPlayed";
 import Lottie from "lottie-react";
-
+import GlitchSvg from "@/components/glitch-svg";
+import spiderman from "../public/spiderman.svg";
 import SplitText from "gsap/SplitText"; // ✅ requires GSAP bonus plugin
 
 export default function Home() {
@@ -19,8 +20,10 @@ export default function Home() {
   const calendarScrollRef = useRef<HTMLDivElement | null>(null);
   const [totalContributions, setTotalContributions] = useState<number>(0);
   const navbarRef = useRef<HTMLDivElement | null>(null);
+  const navButtonsRef = useRef<HTMLDivElement | null>(null);
   const [spectrumData, setSpectrumData] = useState<any | null>(null);
   const photoRef = useRef<HTMLDivElement | null>(null);
+  const spidermanRef = useRef<HTMLDivElement | null>(null);
 
   // Recolor any RGBA arrays in the Lottie JSON to the target color (preserve alpha)
   function recolorLottieJson(json: any, targetHex: string) {
@@ -95,7 +98,14 @@ export default function Home() {
       gsap.set(boxes, { opacity: 0 });
       gsap.set(navbarRef.current, {
         opacity: 1,
-        y: 300,
+        y: "-200%",
+      });
+      gsap.set(navButtonsRef.current, {
+        opacity: 0,
+      });
+      gsap.set(spidermanRef.current, {
+        opacity: 1,
+        scale: 1,
       });
       // gsap.set(photoRef.current, { opacity: 1, x: "400%" });
 
@@ -117,11 +127,23 @@ export default function Home() {
       // });
       // // Clear inline transform so CSS hover scale can apply
       // tl.set(photoRef.current, { clearProps: "transform" });
+      tl.to(spidermanRef.current, {
+        scale: 6,
+        opacity: 0,
+        duration: 2,
+        delay: 2,
+        ease: "expo.inOut",
+      });
       tl.to(navbarRef.current, {
         opacity: 1,
         y: 0,
+        duration: 0.5,
+        clearProps: "transform",
       });
 
+      tl.to(navButtonsRef.current, {
+        opacity: 1,
+      });
       // Step 2: Boxes with stagger
       tl.fromTo(
         boxes,
@@ -202,6 +224,20 @@ export default function Home() {
     // Keep horizontal overflow hidden so slide-ins don't create a horizontal scrollbar.
     // If you only want bottom padding, use pb-4 instead of p-4.
     <div className="h-[100dvh] bg-[#FAE3AC] p-4 overflow-x-hidden overscroll-none">
+      <div
+        ref={spidermanRef}
+        className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
+      >
+        <GlitchSvg
+          glitch={true}
+          src="/spiderman.svg"
+          alt="Hover glitch effect SVG"
+          enableOnHover={true}
+          speed={0.8}
+          width={200}
+          height={200}
+        />
+      </div>
       {/* Make the grid fill the padded area exactly */}
       <div
         // data-from="up"
@@ -212,7 +248,7 @@ export default function Home() {
           ref={navbarRef}
           className="col-span-6 row-span-1 bg-[#01344F] rounded-lg shadow-md flex items-center justify-between px-8"
         >
-          <h1 className="font-bangers text-[#D12128] text-[100px] tracking-wider">
+          <h1 className="font-bangers font-bold text-[#D12128] text-[100px] tracking-wider">
             <GlitchText
               speed={0.1}
               enableShadows={true}
@@ -222,7 +258,7 @@ export default function Home() {
               KEERTAN KUPPILI
             </GlitchText>
           </h1>
-          <nav className="flex gap-8">
+          <nav ref={navButtonsRef} className="flex gap-8">
             <button className="text-[#D12128] font-bold font-figtree text-lg hover:opacity-80 transition-opacity">
               HOME
             </button>
