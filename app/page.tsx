@@ -119,7 +119,7 @@ export default function Home() {
       rotation: 15,
       duration: 0.5,
       ease: "power3.in",
-      onComplete: () => gsap.set(card, { opacity: 0 }),
+      onComplete: () => { gsap.set(card, { opacity: 0 }); },
     });
   };
 
