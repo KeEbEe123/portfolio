@@ -57,14 +57,14 @@ export default function Page() {
     <div className="h-[100dvh] bg-[#141414] overflow-hidden">
       <div
         ref={spidermanRef}
-        className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
+        className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none text-red-500"
       >
         <GlitchSvg
           glitch={true}
           src="/spiderman.svg"
           alt="Intro SVG"
           enableOnHover={false}
-          speed={0.8}
+          speed={0.1}
           width={200}
           height={200}
         />
@@ -72,4 +72,3 @@ export default function Page() {
     </div>
   );
 }
-

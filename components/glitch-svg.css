@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Bangers&display=swap");
+
 .glitch-svg {
   position: relative;
   display: inline-block;
@@ -11,6 +13,17 @@
   display: block;
 }
 
+/* Text styling for the name phase */
+.glitch-text {
+  font-family: "Bangers", cursive;
+  line-height: 1;
+  display: block;
+  /* Reasonable default size; can be overridden from parent */
+  font-size: clamp(24px, 6vw, 72px);
+  color: #d12128;
+  white-space: nowrap;
+}
+
 .glitch-svg-before,
 .glitch-svg-after {
   position: absolute;
@@ -18,6 +31,12 @@
   left: 0;
   z-index: 1;
   opacity: 0.8;
+}
+
+/* Ensure text clones use same typography */
+.glitch-svg-before.glitch-text,
+.glitch-svg-after.glitch-text {
+  font-family: "Bangers", cursive;
 }
 
 .glitch-svg:not(.enable-on-hover) .glitch-svg-after {
@@ -78,11 +97,27 @@
   clip-path: inset(0 0 0 0);
 }
 
+/* Color channels for text clones during active glitch */
+.glitch-svg.active-glitch .glitch-svg-before.glitch-text {
+  color: cyan;
+}
+.glitch-svg.active-glitch .glitch-svg-after.glitch-text {
+  color: purple;
+}
+
 /* If active-glitch is present, ignore hover-triggered animations to keep the
    timing loop authoritative. */
 /* Note: no hover override here; when active-glitch is set, the rules above
    (declared later in the file) will win due to cascade order, keeping
    the animation running regardless of hover. */
+
+/* Force static when NOT glitching (overrides both hover and non-hover modes). */
+.glitch-svg:not(.active-glitch) .glitch-svg-before,
+.glitch-svg:not(.active-glitch) .glitch-svg-after {
+  opacity: 0;
+  animation: none !important;
+  clip-path: inset(0 0 0 0);
+}
 
 @keyframes animate-glitch-svg {
   0% {

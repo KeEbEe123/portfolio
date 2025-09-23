@@ -11,7 +11,10 @@ interface GlitchSvgProps {
   className?: string;
   width?: number;
   height?: number;
+  nameText?: string; // defaults to "keertan kuppili"
 }
+
+type Phase = "logo-glitch" | "name-static" | "name-glitch" | "logo-static";
 
 const GlitchSvg: React.FC<GlitchSvgProps> = ({
   src,
@@ -23,62 +26,91 @@ const GlitchSvg: React.FC<GlitchSvgProps> = ({
   className = "",
   width,
   height,
+  nameText = "keertan kuppili",
 }) => {
-  const [isGlitching, setIsGlitching] = useState(false);
+  const [phase, setPhase] = useState<Phase>("logo-static");
 
-  // Manage the timed glitch loop when `glitch` is enabled
+  const isGlitching = phase === "logo-glitch" || phase === "name-glitch";
+  const showName = phase === "name-static" || phase === "name-glitch";
+
+  // Phase sequence controller
   useEffect(() => {
     if (!glitch) {
-      setIsGlitching(false);
+      setPhase("logo-static");
       return;
     }
 
     let cancelled = false;
     const timers: number[] = [];
 
-    const runCycle = () => {
+    const runSequence = () => {
       if (cancelled) return;
-      // Glitch for 1s
-      setIsGlitching(true);
+      // Desired sequence:
+      // 1) logo-static -> 2) logo-glitch -> 3) name-glitch -> 4) name-static ->
+      // 5) name-glitch -> 6) logo-glitch -> 7) logo-static -> loop
+
+      // 1) Static logo (brief hold)
+      setPhase("logo-static");
       timers.push(
         window.setTimeout(() => {
           if (cancelled) return;
-          // Pause for 2s
-          setIsGlitching(false);
+          // 2) Glitch logo ~1s
+          setPhase("logo-glitch");
           timers.push(
             window.setTimeout(() => {
               if (cancelled) return;
-              // Glitch for 1s
-              setIsGlitching(true);
+              // 3) Glitch name ~1s
+              setPhase("name-glitch");
               timers.push(
                 window.setTimeout(() => {
                   if (cancelled) return;
-                  // Pause for 1s then loop
-                  setIsGlitching(false);
+                  // 4) Static name ~0.5s
+                  setPhase("name-static");
                   timers.push(
                     window.setTimeout(() => {
                       if (cancelled) return;
-                      runCycle();
-                    }, 1000)
+                      // 5) Glitch name ~1s
+                      setPhase("name-glitch");
+                      timers.push(
+                        window.setTimeout(() => {
+                          if (cancelled) return;
+                          // 6) Glitch logo ~1s
+                          setPhase("logo-glitch");
+                          timers.push(
+                            window.setTimeout(() => {
+                              if (cancelled) return;
+                              // 7) Static logo (end + loop)
+                              setPhase("logo-static");
+                              timers.push(
+                                window.setTimeout(() => {
+                                  if (cancelled) return;
+                                  runSequence();
+                                }, 200) // short settle before looping
+                              );
+                            }, 200)
+                          );
+                        }, 300)
+                      );
+                    }, 500)
                   );
                 }, 300)
               );
-            }, 2000)
+            }, 200)
           );
         }, 1000)
       );
     };
 
-    runCycle();
+    runSequence();
 
     return () => {
       cancelled = true;
       timers.forEach((t) => clearTimeout(t));
-      setIsGlitching(false);
+      setPhase("logo-static");
     };
   }, [glitch]);
 
-  // During glitching, force 0.1s durations; otherwise use provided speed
+  // During glitching, force fast durations; otherwise use provided speed
   const inlineStyles = {
     "--after-duration": isGlitching ? `0.1s` : `${speed * 3}s`,
     "--before-duration": isGlitching ? `0.1s` : `${speed * 2}s`,
@@ -94,29 +126,45 @@ const GlitchSvg: React.FC<GlitchSvgProps> = ({
       className={`glitch-svg ${hoverClass} ${activeClass} ${className}`}
       style={inlineStyles}
     >
-      <img
-        src={src || "/placeholder.svg"}
-        alt={alt}
-        width={width}
-        height={height}
-        className="glitch-svg-main"
-      />
-      <img
-        src={src || "/placeholder.svg"}
-        alt=""
-        width={width}
-        height={height}
-        className="glitch-svg-before"
-        aria-hidden="true"
-      />
-      <img
-        src={src || "/placeholder.svg"}
-        alt=""
-        width={width}
-        height={height}
-        className="glitch-svg-after"
-        aria-hidden="true"
-      />
+      {showName ? (
+        <>
+          <span className="glitch-svg-main glitch-text" aria-label={nameText}>
+            {nameText}
+          </span>
+          <span className="glitch-svg-before glitch-text" aria-hidden="true">
+            {nameText}
+          </span>
+          <span className="glitch-svg-after glitch-text" aria-hidden="true">
+            {nameText}
+          </span>
+        </>
+      ) : (
+        <>
+          <img
+            src={src || "/placeholder.svg"}
+            alt={alt}
+            width={width}
+            height={height}
+            className="glitch-svg-main"
+          />
+          <img
+            src={src || "/placeholder.svg"}
+            alt=""
+            width={width}
+            height={height}
+            className="glitch-svg-before"
+            aria-hidden="true"
+          />
+          <img
+            src={src || "/placeholder.svg"}
+            alt=""
+            width={width}
+            height={height}
+            className="glitch-svg-after"
+            aria-hidden="true"
+          />
+        </>
+      )}
     </div>
   );
 };
