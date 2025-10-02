@@ -9,9 +9,11 @@
   },
   "dependencies": {
     "@lottiefiles/dotlottie-react": "^0.17.1",
+    "@radix-ui/react-slot": "^1.2.3",
     "bootstrap-icons": "^1.13.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "embla-carousel-react": "^8.6.0",
     "framer-motion": "^12.23.16",
     "gsap": "^3.13.0",
     "lottie-react": "^2.4.1",

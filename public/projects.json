@@ -1,0 +1,90 @@
+[
+  {
+    "id": "voice-ai-1",
+    "title": "VOICE AI",
+    "description": "An AI-powered voice assistant that uses natural language processing to understand and respond to user commands. Built with cutting-edge machine learning models and real-time audio processing capabilities.",
+    "stack": [
+      "python",
+      "tensor",
+      "react",
+      "node",
+      "flask",
+      "tailwind",
+      "three"
+    ],
+    "imageGallery": [
+      "https://i.ibb.co/zHGGg2YC/Screenshot-2025-10-02-164614.png",
+      "https://i.ibb.co/6RD5j76X/Screenshot-2025-10-02-164750.png",
+      "https://i.ibb.co/MyfmNcGv/Screenshot-2025-10-02-164841.png"
+    ],
+    "learnings": [
+      "Learned to implement real-time audio streaming and processing",
+      "Gained experience with TensorFlow and neural network architectures",
+      "Mastered WebSocket connections for bidirectional communication"
+    ],
+    "urls": {
+      "github": "https://github.com/yourusername/voice-ai",
+      "live": "https://voice-ai-demo.vercel.app"
+    }
+  },
+  {
+    "id": "edmit",
+    "title": "EDMIT",
+    "description": "A collaborative code editor with real-time synchronization, allowing multiple developers to work together seamlessly. Features include syntax highlighting, auto-completion, and integrated chat.",
+    "stack": ["react", "node", "tailwind", "mongo", "aws"],
+    "imageGallery": [
+      "https://via.placeholder.com/800x600/D12128/FFFFFF?text=Edmit+Screenshot+1",
+      "https://via.placeholder.com/800x600/01344F/FFFFFF?text=Edmit+Screenshot+2",
+      "https://via.placeholder.com/800x600/FAE3AC/000000?text=Edmit+Screenshot+3"
+    ],
+    "learnings": [
+      "Implemented operational transformation for conflict resolution",
+      "Built scalable real-time architecture with Socket.io",
+      "Designed intuitive UX for collaborative editing experiences"
+    ],
+    "urls": {
+      "github": "https://github.com/yourusername/edmit",
+      "live": "https://edmit-editor.vercel.app"
+    }
+  },
+  {
+    "id": "therefm",
+    "title": "There.FM",
+    "description": "An enhanced version of the voice assistant with multi-language support and advanced sentiment analysis. Includes custom wake word detection and personalized voice responses.",
+    "stack": ["socket", "react", "next", "tailwind", "node"],
+    "imageGallery": [
+      "https://via.placeholder.com/800x600/D12128/FFFFFF?text=Voice+AI+v2+Screenshot+1",
+      "https://via.placeholder.com/800x600/01344F/FFFFFF?text=Voice+AI+v2+Screenshot+2",
+      "https://via.placeholder.com/800x600/FAE3AC/000000?text=Voice+AI+v2+Screenshot+3"
+    ],
+    "learnings": [
+      "Developed custom wake word detection algorithms",
+      "Implemented multi-language NLP with PyTorch",
+      "Optimized model inference for edge devices"
+    ],
+    "urls": {
+      "github": "https://github.com/yourusername/voice-ai-v2",
+      "live": "https://voice-ai-v2-demo.vercel.app"
+    }
+  },
+  {
+    "id": "fishy",
+    "title": "FISHY",
+    "description": "A phishing detection tool that analyzes websites and emails for suspicious patterns. Uses machine learning to identify potential threats and protect users from malicious content.",
+    "stack": ["python", "flask", "tensor", "chrome"],
+    "imageGallery": [
+      "https://via.placeholder.com/800x600/D12128/FFFFFF?text=Fishy+Screenshot+1",
+      "https://via.placeholder.com/800x600/01344F/FFFFFF?text=Fishy+Screenshot+2",
+      "https://via.placeholder.com/800x600/FAE3AC/000000?text=Fishy+Screenshot+3"
+    ],
+    "learnings": [
+      "Built ML models for pattern recognition in web content",
+      "Learned about cybersecurity and phishing techniques",
+      "Created browser extension for real-time threat detection"
+    ],
+    "urls": {
+      "github": "https://github.com/yourusername/fishy",
+      "live": "https://fishy-detector.vercel.app"
+    }
+  }
+]

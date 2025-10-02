@@ -1,6 +1,6 @@
 import type React from "react";
 import type { Metadata } from "next";
-import { Marcellus_SC, Figtree, Bangers } from "next/font/google";
+import { Marcellus_SC, Figtree, Bangers, Covered_By_Your_Grace } from "next/font/google";
 import { Suspense } from "react";
 import CustomCursor from "@/components/CustomCursor";
 import "./globals.css";
@@ -20,6 +20,12 @@ const bangers = Bangers({
   weight: "400",
   subsets: ["latin"],
   variable: "--font-bangers",
+});
+
+const coveredByYourGrace = Covered_By_Your_Grace({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-covered",
 });
 
 export const metadata: Metadata = {
@@ -42,7 +48,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${marcellusSC.variable} ${figtree.variable} ${bangers.variable} antialiased`}
+        className={`${marcellusSC.variable} ${figtree.variable} ${bangers.variable} ${coveredByYourGrace.variable} antialiased`}
       >
         <CustomCursor />
         <Suspense fallback={null}>{children}</Suspense>

@@ -58,6 +58,13 @@
     alternate-reverse;
 }
 
+.glitch.glitch-disabled::after,
+.glitch.glitch-disabled::before {
+  content: "";
+  opacity: 0;
+  animation: none;
+}
+
 @keyframes animate-glitch {
   0% {
     clip-path: inset(20% 0 50% 0);
